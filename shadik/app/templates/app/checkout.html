@@ -1,0 +1,168 @@
+{% extends 'app/base.html' %}
+{% load filters %}
+{% load static %}
+{% block title %}Checkout{% endblock title %}
+{% block main-content %}
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-sm-6">
+      <h4>Order Summary</h4>
+      <hr>
+      {% if sp_cart_items %}
+      {% for item in sp_cart_items %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5>Product: {{item.title}}</h5>
+          <p>Quantity: 1</p>
+          <p class="fw-bold">Price: {{ item.selling_price }}</p>
+          {% if discount %}
+
+          <h5 class="mt-3 mb-2">Congratulation you have get {{discount}}% discount </h5>
+          <p class="fw-bold">Total Price: {{ discounted_price|add:70 }}</p>
+          {% comment %} <p>Discount ({{ discount }}%): -{{ discount_amount }}</p> {% endcomment %}
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+     
+      {% for item in cart_items %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5>Product: {{ item.product.title }}</h5>
+          <p>Quantity: {{ item.quantity }}</p>
+          {% if discount_for_score == 20 %}
+          <p class="fw-bold">You Got {{ discount_for_score }}% Discount</p>
+          <p class="fw-bold">Price: ${{ per_item_discount_price|get_item:item.id }}</p>
+          {% else %}
+          <p class="fw-bold">Price: ${{ item.product.selling_price }}</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <p class="fw-bold">Total price: {{total_discounted_price|add:70}}</p>
+      {% endif %}
+      <small>Term and Condition: Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, ullam saepe! Iure
+        optio repellat dolor velit, minus rem. Facilis cumque neque numquam laboriosam, accusantium adipisci nisi nihil
+        in et quis?</small>
+    </div>
+    <div class="col-sm-4 offset-sm-1">
+      {% if add %}
+      <h4>Select Shipping Address</h4>
+      {% else %}
+      <h4>Update your Shipping Address</h4>
+      {% endif %}
+      <hr>
+      {% if add %}
+      {% if sp_cart_items %}
+      
+      <form action="/payment_done/{{proid}}/" method="get">
+
+        {% for ad in add %}
+        <div class="card">
+          <div class="card-body">
+            <h5>{{ad.name}}</h5>
+            <p>{{ad.locality}}, {{ad.city}}, {{ad.state}}- {{ad.zipcode}}</p>
+          </div>
+        </div>
+        <div class="form-check mt-2 mb-5">
+          <input class="form-check-input" type="radio" name="custid" id="custadd{{forloop.counter}}" value="{{ad.id}}">
+          <label class="form-check-label fw-bold" for="custadd{{forloop.counter}}">
+            Address: {{ forloop.counter }} </label>
+        </div>
+        {% endfor %}
+        <div class="text-end">
+          <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
+        </div>
+      </form>
+      {% else %}
+
+      <form action="/paymentdone" method="post">
+        {% csrf_token %}
+        {% for ad in add %}
+
+        <div class="card">
+          <div class="card-body">
+            <h5>{{ad.name}}</h5>
+            <p>{{ad.locality}}, {{ad.city}}, {{ad.state}}- {{ad.zipcode}}</p>
+          </div>
+        </div>
+        <div class="form-check mt-2 mb-5">
+          <input class="form-check-input" type="radio" name="custid" id="cust{{forloop.counter}}" value="{{ad}}">
+          <label class="form-check-label fw-bold" for="cust{{forloop.counter}}">
+            Address: {{ forloop.counter }} </label>
+        </div>
+        {% endfor %}
+        <div class="text-end">
+          <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
+        </div>
+      </form>
+      {% endif %}
+
+
+      {% else %}
+      {% if sp_cart_items %}
+      <form action="/checkout-helper-agent/{{proid}}/" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="Input1" class="form-label">Full name</label>
+          <input class="form-control" type="text" placeholder="Full name" id="Input1" name="fullname">
+        </div>
+        <div class="mb-3">
+          <label for="Input2" class="form-label">Locality</label>
+          <input class="form-control" type="text" placeholder="Street no" id="Input2" name="address">
+        </div>
+        <div class="mb-3">
+          <label for="Input5" class="form-label">City</label>
+          <input class="form-control" type="text" placeholder="zip code" id="Input5" name="city">
+        </div>
+        <div class="mb-3">
+          <label for="Input3" class="form-label">State</label>
+          <input class="form-control" type="text" placeholder="State" id="Input3" name="state">
+        </div>
+        <div class="mb-3">
+          <label for="Input4" class="form-label">Zip code</label>
+          <input class="form-control" type="text" placeholder="zip code" id="Input4" name="zipcode">
+        </div>
+
+        <div class="mb-3 mt-3">
+
+          <button class="btn btn-warning w-100">Submit</button>
+        </div>
+      </form>
+      {% else %}
+      <form action="/checkout-helper-agent/" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="Input1" class="form-label">Full name</label>
+          <input class="form-control" type="text" placeholder="Full name" id="Input1" name="fullname">
+        </div>
+        <div class="mb-3">
+          <label for="Input2" class="form-label">Locality</label>
+          <input class="form-control" type="text" placeholder="Street no" id="Input2" name="address">
+        </div>
+        <div class="mb-3">
+          <label for="Input5" class="form-label">City</label>
+          <input class="form-control" type="text" placeholder="zip code" id="Input5" name="city">
+        </div>
+        <div class="mb-3">
+          <label for="Input3" class="form-label">State</label>
+          <input class="form-control" type="text" placeholder="State" id="Input3" name="state">
+        </div>
+        <div class="mb-3">
+          <label for="Input4" class="form-label">Zip code</label>
+          <input class="form-control" type="text" placeholder="zip code" id="Input4" name="zipcode">
+        </div>
+
+        <div class="mb-3 mt-3">
+
+          <button class="btn btn-warning w-100">Submit</button>
+        </div>
+      </form>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock main-content %}

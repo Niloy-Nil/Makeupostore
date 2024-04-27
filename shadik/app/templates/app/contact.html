@@ -1,0 +1,54 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Contact{% endblock title %}
+
+{% block banner_slider %}
+<div class="container mt-5" style="margin-bottom: 220px;">
+    <h1 class="text-center">Contact Us</h1>
+    <div class="mt-4 mb-4">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <h2 class="mb-5">Our Contacts</h2>
+                <div class="mb-4">
+                    <h5><span>Ph no:</span> +91 2222 2222</h5>
+                  </div>
+                <div class="mb-4">
+                    <h5><span>Email:</span> support@gmail.com</h5>
+                  </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-12">
+
+                <form action="/contact" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="mb-3">
+                                <label for="Input1" class="form-label">Full name</label>
+                                <input class="form-control" type="text" placeholder="Full name" id="Input1" name="fullname">
+                              </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="mb-3">
+                                <label for="Input2" class="form-label">Email</label>
+                                <input class="form-control" type="email" placeholder="acb@gmail.com" id="Input2" name="email">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Input3" class="form-label">Subject</label>
+                        <input class="form-control" type="text" placeholder="i.e. I have faced problem while purchasing product" id="Input3" name="subject">
+                      </div>
+                    <div class="mb-3">
+                        <label for="Input4" class="form-label">Message</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" name="msg" rows="5" style="resize: none;"></textarea>
+                      </div>
+                    <div class="mb-3">
+                       <button class="btn btn-dark">Submit</button>
+                      </div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock banner_slider %}
